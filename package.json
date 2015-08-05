@@ -1,0 +1,32 @@
+{
+  "name": "browser-clean",
+  "version": "0.0.1",
+  "description": "",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "rinse": "*",
+    "front-module-builder": "*"
+  },
+  "devDependencies": {
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LoveKino/browser-clean.git"
+  },
+  "keywords": [
+    "browser",
+    "clean",
+    "memory"
+  ],
+  "license": "MIT",
+  "author": {
+    "name": "ddchen",
+    "email": "842914439@qq.com"
+  }
+}

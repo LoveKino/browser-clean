@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo1</title>
+	<script src="../../browser/browser-clean.js"></script>
+	<script>
+		browserCleaner.record();
+		console.log("window.globalVar: " + window.globalVar);
+
+	</script>
+</head>
+<body>
+	<h5>this is demo1</h5>
+	<button id="clean">clean</button>
+	<script>
+		var globalVar = document.getElementsByTagName("head");
+		var cleanNode = document.getElementById("clean");
+
+		console.log("window.globalVar: " + window.globalVar);
+
+		cleanNode.addEventListener("click", function(e){
+			browserCleaner.clean();
+			console.log("window.globalVar: " + globalVar);
+			console.log("window.cleanNode: " + cleanNode);
+		});
+	</script>
+</body>
+</html>
