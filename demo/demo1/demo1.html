@@ -5,12 +5,15 @@
 	<title>demo1</title>
 	<script src="../../browser/browser-clean.js"></script>
 	<script>
+	    var date1 = new Date();
 		browserCleaner.record([{
 			target: window,
 			opts:{
-				ignore: [/webkit/]
+				ignore: browserCleaner.generalConf.windowIgnore
 			}
 		}]);
+		var date2 = new Date();
+		console.log(date2.getTime() - date1.getTime());
 		console.log("window.globalVar: " + window.globalVar);
 	</script>
 </head>
@@ -20,6 +23,8 @@
 	<script>
 		var globalVar = document.getElementsByTagName("head");
 		var cleanNode = document.getElementById("clean");
+
+		localStorage["a"] = 1;
 
 		console.log("window.globalVar: " + window.globalVar);
 

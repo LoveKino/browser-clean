@@ -152,12 +152,13 @@ var browserCleaner = (function(){var __moduleMap={};var define = function(path,f
 		var expandChild = function(parentNode, name) {
 			var obj = parentNode.pointer;
 			var path = parentNode.path;
-			var value = obj[name];
+
 			var childPath = name;
 			if (path) {
 				childPath = path + "." + childPath;
 			}
 			if (!shouldIgnore(childPath)) {
+				var value = obj[name];
 				var childNode = new Node(value, childPath);
 				parentNode.addChild(name, childNode);
 			}
@@ -327,11 +328,7 @@ module.exports = require('/Users/ddchen/Coding/opensource/browser-clean/node_mod
 });define('/Users/ddchen/Coding/opensource/browser-clean/lib/browser-clean.js', function(require, module, exports){
 /**
  * @author ddchen
- *
- * @todo 
- * 	1. white list
  */
-
 
 var rinse = require('/Users/ddchen/Coding/opensource/browser-clean/node_modules/rinse/index.js');
 var objectScenes = null;
@@ -370,10 +367,11 @@ module.exports = {
 	clean: function() {
 		for (var i = 0; i < cleanRules.length; i++) {
 			var rule = cleanRules[i];
-			if (isFunction(rule)) {
-				rule();
-			}
+			isFunction(rule) && rule();
 		}
+	},
+	generalConf: {
+		windowIgnore: [/webkit/, "location", "document.location", "localStorage", "sessionStorage", "history", "browserCleaner"]
 	}
 }
 });define('/Users/ddchen/Coding/opensource/browser-clean/index.js', function(require, module, exports){
