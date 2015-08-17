@@ -117,4 +117,15 @@ browserCleaner.clean();
   (2) type  the event type.<br>
   (3) handler the reference of event handler.<br>
 
+* you should record first, before you add some events. And please use addEventListener(attachEvent in IE) and removeEventListener(detachEvent in IE).
+
+* use addEventIgnore interface to append ignores list and any place you want.
+```
+browserCleaner.addEventIgnore(document.body, "click", click2);
+```
+
+Todo
+--------------------------------------------------
+1. more tests
+2. test browser compatibility
 
