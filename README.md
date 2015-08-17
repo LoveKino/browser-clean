@@ -4,7 +4,7 @@ browser-clean is a tool to clean your web page, include cleaning objects and ori
 
 Background
 ----------------------------------
-There are some scene that you need to release some objects, nodes or listeners. Especially in SPA projects.
+There are some scenes that you need to release some objects, nodes or listeners. Especially in SPA projects.
 
 In SPA projects, we switch pages and we need to release memory of last page. Thoese memory contains some objects, some nodes and some listeners.
 
