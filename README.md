@@ -121,7 +121,7 @@ browserCleaner.clean();
 
 * use addEventIgnore interface to append ignores list and any place you want.
 ```
-browserCleaner.addEventIgnore(document.body, "click", click2);
+browserCleaner.addEventIgnore(document.body, "click", handler);
 ```
 
 Todo
