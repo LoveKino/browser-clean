@@ -349,10 +349,9 @@ module.exports = {
 }
 });define('/Users/ddchen/Coding/opensource/browser-clean/lib/originalEventAgent.js', function(require, module, exports){
 /**
- * @author  ddchen
  *
- *  1. collect events
- *  2. release events, consider white list
+ * original event agent
+ * @author  ddchen
  *
  * eventMatrix
  * 		[{
@@ -371,12 +370,6 @@ module.exports = {
  *      	funName: funName
  *      }]
  *
- * whiteList
- *      [{
- *      	node: node,   // must
- *      	type: "click", // must
- *      	handler: handler // must
- *      }]
  *
  * to-do
  *  1. Compatible IE
@@ -583,15 +576,22 @@ module.exports = {
 /**
  * rinser for browser original events
  * @author  ddchen
+ *
+ *  ignores
+ *      [{
+ *      	node: node,   // must
+ *      	type: "click", // must
+ *      	handler: handler // must
+ *      }]
  */
 
 var originalEventAgent = require('/Users/ddchen/Coding/opensource/browser-clean/lib/originalEventAgent.js');
-var whiteList = null;
+var ignores = null;
 
-var containInWhiteList = function(node, eventType, eventHandler) {
-	if (!whiteList) return false;
-	for (var i = 0; i < whiteList.length; i++) {
-		var whitePart = whiteList[i];
+var containInIgnores = function(node, eventType, eventHandler) {
+	if (!ignores) return false;
+	for (var i = 0; i < ignores.length; i++) {
+		var whitePart = ignores[i];
 		if (node === whitePart.node &&
 			eventType === whitePart.type &&
 			eventHandler === whitePart.handler) {
@@ -601,7 +601,6 @@ var containInWhiteList = function(node, eventType, eventHandler) {
 	return false;
 }
 
-
 var clean = function() {
 	var list = originalEventAgent.getErgodicList();
 	for (var i = 0; i < list.length; i++) {
@@ -610,19 +609,29 @@ var clean = function() {
 		var type = item.type;
 		var handler = item.handler;
 		var funName = originalEventAgent.getRemoveName();
-		if (!containInWhiteList(node, type, handler)) {
+		if (!containInIgnores(node, type, handler)) {
 			node[funName].apply(node, [type, handler]);
 		}
 	}
 }
 
+var addEventIgnore = function(node, type, handler) {
+	if (!ignores) ignores = [];
+	ignores.push({
+		node: node,
+		type: type,
+		handler: handler
+	});
+}
+
 module.exports = {
 	record: function(confs) {
 		confs = confs || {};
-		whiteList = confs.whiteList;
+		ignores = confs.ignores;
 		originalEventAgent.proxy();
 	},
-	clean: clean
+	clean: clean,
+	addEventIgnore: addEventIgnore
 }
 });define('/Users/ddchen/Coding/opensource/browser-clean/lib/browser-clean.js', function(require, module, exports){
 /**
@@ -654,6 +663,7 @@ addCleanRule(function() {
 
 module.exports = {
 	addCleanRule: addCleanRule,
+	addEventIgnore: originalEventRinser.addEventIgnore,
 	record: function(opts) {
 		confs = opts || {};
 		objectRinser.record(confs.objects);

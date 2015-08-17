@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>demo3</title>
+	<script src="../../browser/browser-clean.js"></script>
+</head>
+<body>
+	<button id="ignoreBtn">ignoreBtn</button>
+	<script>
+		var clickIgnore = function(e){
+			e.stopPropagation();
+	    	console.log("click ignoreBtn");
+	    };
+	    document.getElementById("ignoreBtn").addEventListener("click", clickIgnore);
+		
+		browserCleaner.record({
+			events: {
+				on: true,
+				ignores: [{
+					node: document.getElementById("ignoreBtn"),
+					type: "click",
+					handler: clickIgnore
+				}]
+			}
+		});
+
+	</script>
+	<h5>this is demo2, it should works for ignores.</h5>
+	<button id="clean">clean</button>
+	<script>
+	    document.body.addEventListener("click", function(e){
+	    	console.log("click body 1");
+	    });
+	    var click2 = function(e){
+	    	console.log("ignored: click body 2");
+	    };
+	    document.body.addEventListener("click", click2);
+	    // 
+	    browserCleaner.addEventIgnore(document.body, "click", click2);
+	    //
+		var cleanNode = document.getElementById("clean");
+		cleanNode.addEventListener("click", function(e){
+			e.stopPropagation();
+			console.log("do clean!");
+			browserCleaner.clean();
+		});
+	</script>
+</body>
+</html>
