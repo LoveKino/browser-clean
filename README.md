@@ -87,5 +87,34 @@ browserCleaner.record({
 browserCleaner.clean();
 ```
 
+## How to release listeners
+The thought of release listeners is that we release all events we add but the ignored events when we chose to clean.
+
+```
+browserCleaner.record({
+     events: {
+         on: true,
+         ignores: [{
+            node: document.body,
+            type: "click",
+            handler: handler
+         }]
+     }
+});
+```
+```
+// released when clean
+browserCleaner.clean();
+```
+* on
+
+  If on is true, this function will be actived. Otherwise, listener release function won't work.
+
+* ignores
+
+  It's a white list. Event contained by it will be ignored. Every ignored event contains three attributes, they are:<br>
+  (1) node  the element include window.<br>
+  (2) type  the event type.<br>
+  (3) handler the reference of event handler.<br>
 
 
