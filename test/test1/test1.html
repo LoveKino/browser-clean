@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>demo1</title>
+	<title>test1</title>
 	<script src="../../browser/browser-clean.js"></script>
 	<script>
 	    var date1 = new Date();
@@ -20,14 +20,16 @@
 	</script>
 </head>
 <body>
-	<h5>this is demo1</h5>
+	<h5>This is test1!</h5>
 	<button id="clean">clean</button>
+	<p>when click clean button, new declared objects will be undefined. (see the console results.)</p>
 	<script>
 		var globalVar = document.getElementsByTagName("head");
 		var cleanNode = document.getElementById("clean");
 		console.log("window.globalVar: " + window.globalVar);
 
 		cleanNode.addEventListener("click", function(e){
+			console.log("----------------clean objects----------------");
 			browserCleaner.clean();
 			console.log("window.globalVar: " + globalVar);
 			console.log("window.cleanNode: " + cleanNode);
