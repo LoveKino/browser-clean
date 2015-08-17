@@ -347,9 +347,8 @@ module.exports = {
 		}
 	}
 }
-});define('/Users/ddchen/Coding/opensource/browser-clean/lib/originalEventRinser.js', function(require, module, exports){
+});define('/Users/ddchen/Coding/opensource/browser-clean/lib/originalEventAgent.js', function(require, module, exports){
 /**
- * rinser for browser original events
  * @author  ddchen
  *
  *  1. collect events
@@ -385,7 +384,6 @@ module.exports = {
  * represent: window and document
  * In safari, window.hasOwnProperty("addEventListener") => true
  */
-var whiteList = null;
 
 var eventMatrix = [];
 var proxyList = [];
@@ -399,21 +397,6 @@ var proxyEventInterface = function() {
 
 	proxyRemoveEvent(globalObject);
 	proxyRemoveEvent(domRepresent);
-}
-
-var clean = function() {
-	var list = getErgodicList();
-	for (var i = 0; i < list.length; i++) {
-		var item = list[i];
-		var node = item.node;
-		var type = item.type;
-		var handler = item.handler;
-		var funName = getRemoveName();
-		if (!containInWhiteList(node, type, handler)) {
-			node[funName].apply(node, [type, handler]);
-			removeEventInfoFromList(node, type, handler);
-		}
-	}
 }
 
 var proxyAddEvent = function(represent) {
@@ -556,19 +539,6 @@ var isFunction = function(fn) {
 		/function/i.test(fn + "");
 }
 
-var containInWhiteList = function(node, eventType, eventHandler) {
-	if (!whiteList) return false;
-	for (var i = 0; i < whiteList.length; i++) {
-		var whitePart = whiteList[i];
-		if (node === whitePart.node &&
-			eventType === whitePart.type &&
-			eventHandler === whitePart.handler) {
-			return true;
-		}
-	}
-	return false;
-}
-
 var getErgodicList = function() {
 	var list = [];
 	for (var i = 0; i < eventMatrix.length; i++) {
@@ -604,10 +574,53 @@ var removeFromList = function(list, item) {
 }
 
 module.exports = {
+	proxy: proxyEventInterface,
+	getRemoveName: getRemoveName,
+	getAddName: getAddName,
+	getErgodicList: getErgodicList
+}
+});define('/Users/ddchen/Coding/opensource/browser-clean/lib/originalEventRinser.js', function(require, module, exports){
+/**
+ * rinser for browser original events
+ * @author  ddchen
+ */
+
+var originalEventAgent = require('/Users/ddchen/Coding/opensource/browser-clean/lib/originalEventAgent.js');
+var whiteList = null;
+
+var containInWhiteList = function(node, eventType, eventHandler) {
+	if (!whiteList) return false;
+	for (var i = 0; i < whiteList.length; i++) {
+		var whitePart = whiteList[i];
+		if (node === whitePart.node &&
+			eventType === whitePart.type &&
+			eventHandler === whitePart.handler) {
+			return true;
+		}
+	}
+	return false;
+}
+
+
+var clean = function() {
+	var list = originalEventAgent.getErgodicList();
+	for (var i = 0; i < list.length; i++) {
+		var item = list[i];
+		var node = item.node;
+		var type = item.type;
+		var handler = item.handler;
+		var funName = originalEventAgent.getRemoveName();
+		if (!containInWhiteList(node, type, handler)) {
+			node[funName].apply(node, [type, handler]);
+		}
+	}
+}
+
+module.exports = {
 	record: function(confs) {
 		confs = confs || {};
 		whiteList = confs.whiteList;
-		proxyEventInterface();
+		originalEventAgent.proxy();
 	},
 	clean: clean
 }
